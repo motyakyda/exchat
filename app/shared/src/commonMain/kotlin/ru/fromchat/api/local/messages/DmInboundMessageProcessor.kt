@@ -15,6 +15,7 @@ import ru.fromchat.api.schema.messages.dm.DmEnvelope
 import ru.fromchat.api.schema.websocket.types.DmDeletedData
 import ru.fromchat.ui.chat.utils.attachDmReplyReferences
 import ru.fromchat.ui.chat.utils.resolveDmReplyToId
+import ru.fromchat.config.AutoResponder
 
 object DmInboundMessageProcessor {
   suspend fun processNew(element: JsonElement) {
@@ -58,6 +59,7 @@ object DmInboundMessageProcessor {
         val isRead = ActiveDmChatTracker.isActive(otherUserId)
         val inbound = hydrated.copy(is_read = isRead)
         MessageRepository.upsertDmMessage(otherUserId, inbound)
+        AutoResponder.onIncomingMessage(otherUserId)
       }
     }
   }

@@ -181,7 +181,13 @@
     <string name="profile_headline_bio">О себе</string>
     <string name="profile_headline_verification">Официальный аккаунт</string>
     <string name="profile_verified_support">Это официальный аккаунт</string>
+    <string name="profile_verified_support_approved">Одобрен разработчиком FromChat</string>
+    <string name="profile_verified_support_not_approved">Не одобрен разработчиком FromChat</string>
     <string name="profile_verify_prompt_support">Нажмите, чтобы сделать аккаунт официальным (только админы)</string>
+    <string name="profile_developer_headline">Разработчик</string>
+    <string name="profile_developer_support">Разработчик ExChat</string>
+    <string name="profile_developer_support_approved">Разработчик ExChat (Одобрен разработчиком FromChat)</string>
+    <string name="profile_developer_support_not_approved">Разработчик ExChat (Не одобрен разработчиком FromChat)</string>
     <string name="verify">Сделать официальным</string>
     <string name="unverify">Снять официальный статус</string>
     <string name="cd_verified_account">Официальный аккаунт</string>
@@ -456,5 +462,18 @@
     <string name="settings_quick_replies_error_empty">Поля не могут быть пустыми</string>
     <string name="settings_quick_replies_error_space">Ярлык не должен содержать пробелы</string>
     <string name="settings_quick_replies_error_duplicate">Ярлык уже существует</string>
+    <string name="settings_quick_replies_category">Быстрые ответы</string>
+    <string name="settings_auto_responder_category">Автоответчик</string>
+    <string name="settings_auto_responder_enabled">Включить автоответчик</string>
+    <string name="settings_auto_responder_enabled_desc">Автоматически отвечать на новые сообщения, когда чат с собеседником не открыт</string>
+    <string name="settings_auto_responder_text_title">Текст автоответа</string>
+    <string name="settings_auto_responder_text_desc">Изменить сообщение, отправляемое в новые чаты</string>
+    <string name="settings_auto_responder_text_placeholder">Привет! Сейчас я занят, отвечу позже.</string>
+    <string name="settings_auto_responder_text_dialog_title">Текст автоответчика</string>
+    <string name="settings_auto_responder_only_offline">Только когда не в сети</string>
+    <string name="settings_auto_responder_only_offline_desc">Отвечать только если приложение закрыто или работает в фоне для экономии батареи</string>
+    <string name="settings_advanced_category">Дополнительно</string>
+    <string name="settings_approval_status">Одобрять верифицированные аккаунты</string>
+    <string name="settings_approval_status_desc">Если включено, верифицированные аккаунты будут отображаться как одобренные разработчиком FromChat. Иначе — как не одобренные.</string>
 </resources>
 

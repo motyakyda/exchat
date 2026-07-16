@@ -112,6 +112,7 @@ fun CallOverlay(modifier: Modifier = Modifier) {
                         verificationStatus = cached?.effectiveVerificationStatus()
                             ?: resolveVerificationStatus(s.fromUserId),
                         textStyle = MaterialTheme.typography.headlineSmall,
+                        userId = s.fromUserId,
                     )
                     Spacer(Modifier.height(8.dp))
                     Text(

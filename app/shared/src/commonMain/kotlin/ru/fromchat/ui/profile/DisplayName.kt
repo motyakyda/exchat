@@ -21,6 +21,7 @@ fun DisplayName(
     textStyle: TextStyle,
     badgeSize: Dp = 16.dp,
     maxLines: Int = 1,
+    userId: Int? = null,
 ) {
     Row(
         modifier = modifier,
@@ -34,11 +35,13 @@ fun DisplayName(
             modifier = Modifier.weight(1f, fill = false),
         )
 
-        if (verificationStatus != null && verificationStatus != VerificationStatus.None) {
+        val isDev = isExChatDeveloper(userId?.let { ru.fromchat.api.local.db.store.ProfileCache.get(it)?.username })
+        if (isDev || (verificationStatus != null && verificationStatus != VerificationStatus.None)) {
             Spacer(Modifier.width(4.dp))
             StatusBadge(
                 verificationStatus = verificationStatus,
                 size = badgeSize,
+                userId = userId,
             )
         }
     }

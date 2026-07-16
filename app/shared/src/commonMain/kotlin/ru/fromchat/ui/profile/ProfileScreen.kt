@@ -70,6 +70,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.AlternateEmail
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Link
@@ -154,6 +155,9 @@ import ru.fromchat.profile_load_failed
 import ru.fromchat.profile_not_found
 import ru.fromchat.profile_verified_support
 import ru.fromchat.profile_verify_prompt_support
+import ru.fromchat.profile_developer_headline
+import ru.fromchat.profile_developer_support
+import ru.fromchat.profile_developer_support_not_approved
 import ru.fromchat.ui.profile.deletedUserDisplayNameForUi
 import ru.fromchat.ui.profile.avatarLabelForInitials
 import ru.fromchat.ui.profile.displayNameForUi
@@ -502,6 +506,8 @@ fun ProfileScreen(
     val headlineVerification = stringResource(Res.string.profile_headline_verification)
     val verifiedSupport = stringResource(Res.string.profile_verified_support)
     val verifyPromptSupport = stringResource(Res.string.profile_verify_prompt_support)
+    val developerHeadline = stringResource(Res.string.profile_developer_headline)
+    val developerSupport = stringResource(Res.string.profile_developer_support_not_approved)
 
     val profile = liveProfile
         ?: state.profile
@@ -655,11 +661,13 @@ fun ProfileScreen(
     val showDetailsUsername = usernameForLinks != null
     val showDetailsMemberSince = !resolvedProfile?.createdAt.isNullOrBlank()
     val showDetailsBio = !resolvedProfile?.bio.isNullOrBlank()
+    val isDeveloper = resolvedProfile?.username?.let { isExChatDeveloper(it) } ?: false
+    val showDetailsDeveloper = !isDeletedProfile && isDeveloper
     val showDetailsVerify = !isDeletedProfile && (
         resolvedProfile?.verified == true || ApiClient.user?.id == 1
         )
     val showDetailsSection = resolvedProfile != null && !isDeletedProfile && (
-        showDetailsUsername || showDetailsMemberSince || showDetailsBio || showDetailsVerify
+        showDetailsUsername || showDetailsMemberSince || showDetailsBio || showDetailsVerify || showDetailsDeveloper
         )
 
     ScreenSurface(modifier = modifier) {
@@ -778,6 +786,7 @@ fun ProfileScreen(
                                 showDetailsUsername = showDetailsUsername,
                                 showDetailsMemberSince = showDetailsMemberSince,
                                 showDetailsBio = showDetailsBio,
+                                showDetailsDeveloper = showDetailsDeveloper,
                                 showDetailsVerify = showDetailsVerify,
                                 headlineUsername = headlineUsername,
                                 headlineMemberSince = headlineMemberSince,
@@ -786,6 +795,8 @@ fun ProfileScreen(
                                 usernameForLinks = usernameForLinks,
                                 verifiedSupport = verifiedSupport,
                                 verifyPromptSupport = verifyPromptSupport,
+                                developerHeadline = developerHeadline,
+                                developerSupport = developerSupport,
                                 registrationDateStrings = registrationDateStrings,
                                 listItemIconTint = listItemIconTint,
                                 labelCopy = labelCopy,
@@ -1260,6 +1271,7 @@ private fun ProfileLoadedBody(
     showDetailsUsername: Boolean,
     showDetailsMemberSince: Boolean,
     showDetailsBio: Boolean,
+    showDetailsDeveloper: Boolean,
     showDetailsVerify: Boolean,
     headlineUsername: String,
     headlineMemberSince: String,
@@ -1268,6 +1280,8 @@ private fun ProfileLoadedBody(
     usernameForLinks: String?,
     verifiedSupport: String,
     verifyPromptSupport: String,
+    developerHeadline: String,
+    developerSupport: String,
     registrationDateStrings: RegistrationDateFormatStrings,
     listItemIconTint: Color,
     labelCopy: String,
@@ -1314,6 +1328,7 @@ private fun ProfileLoadedBody(
             if (!isDeletedProfile) {
                 StatusBadge(
                     verificationStatus = resolvedProfile.effectiveVerificationStatus(),
+                    username = resolvedProfile.username,
                 )
             }
         }
@@ -1365,6 +1380,7 @@ private fun ProfileLoadedBody(
                 showDetailsUsername,
                 showDetailsMemberSince,
                 showDetailsBio,
+                showDetailsDeveloper,
                 showDetailsVerify,
             ).count { it }
             var detailIndex = 0
@@ -1481,53 +1497,72 @@ private fun ProfileLoadedBody(
                     )
                 }
 
+                if (showDetailsDeveloper) {
+                    val position = listItemPositionInGroup(detailIndex, detailCount)
+                    detailIndex++
+                    ListItem(
+                        headline = developerHeadline,
+                        supportingText = developerSupport,
+                        divider = showDetailsVerify,
+                        position = position,
+                        groupItemCount = detailCount,
+                        leadingContent = {
+                            Icon(
+                                imageVector = Icons.Filled.Code,
+                                contentDescription = null,
+                                tint = listItemIconTint,
+                            )
+                        }
+                    )
+                }
+
                 if (showDetailsVerify) {
                     val position = listItemPositionInGroup(detailIndex, detailCount)
                     detailIndex++
                     ListItem(
-                            headline = headlineVerification,
-                            supportingText = if (resolvedProfile.verified == true) {
-                                verifiedSupport
-                            } else {
-                                verifyPromptSupport
-                            },
-                            divider = true,
-                            position = position,
-                            groupItemCount = detailCount,
-                            leadingContent = {
-                                Icon(
-                                    imageVector = Icons.Filled.Verified,
-                                    contentDescription = null,
-                                    tint = listItemIconTint,
-                                )
-                            },
-                            onClick = if (ApiClient.user?.id == 1) {
-                                {
-                                    scope.launch {
-                                        val result = withContext(Dispatchers.Default) {
-                                            runCatching {
-                                                ApiClient.verifyUser(resolvedProfile.id)
-                                            }.getOrNull()
-                                        }
-                                        result?.let { response ->
-                                            onProfileUpdated(
-                                                resolvedProfile.copy(
-                                                    verified = response.verified,
-                                                    verificationStatus = response.verificationStatus
-                                                        ?: response.verified.let { verified ->
-                                                            if (verified) {
-                                                                ru.fromchat.api.schema.user.profile.VerificationStatus.Verified
-                                                            } else {
-                                                                ru.fromchat.api.schema.user.profile.VerificationStatus.None
-                                                            }
-                                                        },
-                                                ),
-                                            )
-                                        }
+                        headline = headlineVerification,
+                        supportingText = if (resolvedProfile.verified == true) {
+                            verifiedSupport
+                        } else {
+                            verifyPromptSupport
+                        },
+                        divider = true,
+                        position = position,
+                        groupItemCount = detailCount,
+                        leadingContent = {
+                            Icon(
+                                imageVector = Icons.Filled.Verified,
+                                contentDescription = null,
+                                tint = listItemIconTint,
+                            )
+                        },
+                        onClick = if (ApiClient.user?.id == 1) {
+                            {
+                                scope.launch {
+                                    val result = withContext(Dispatchers.Default) {
+                                        runCatching {
+                                            ApiClient.verifyUser(resolvedProfile.id)
+                                        }.getOrNull()
+                                    }
+                                    result?.let { response ->
+                                        onProfileUpdated(
+                                            resolvedProfile.copy(
+                                                verified = response.verified,
+                                                verificationStatus = response.verificationStatus
+                                                    ?: response.verified.let { verified ->
+                                                        if (verified) {
+                                                            ru.fromchat.api.schema.user.profile.VerificationStatus.Verified
+                                                        } else {
+                                                            ru.fromchat.api.schema.user.profile.VerificationStatus.None
+                                                        }
+                                                    },
+                                            ),
+                                        )
                                     }
                                 }
-                            } else null,
-                        )
+                            }
+                        } else null,
+                    )
                 }
             }
         }

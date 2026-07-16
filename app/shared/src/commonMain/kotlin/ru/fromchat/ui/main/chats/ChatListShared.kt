@@ -134,6 +134,7 @@ internal fun ChatListHeadlineWithBadge(
         displayName = title,
         verificationStatus = resolveVerificationStatus(userId),
         textStyle = MaterialTheme.typography.bodyLarge,
+        userId = userId,
     )
 }
 

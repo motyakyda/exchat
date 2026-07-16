@@ -199,7 +199,13 @@
     <string name="profile_headline_bio">About</string>
     <string name="profile_headline_verification">Verified account</string>
     <string name="profile_verified_support">This account is verified</string>
+    <string name="profile_verified_support_approved">Approved by FromChat developer</string>
+    <string name="profile_verified_support_not_approved">Not approved by FromChat developer</string>
     <string name="profile_verify_prompt_support">Tap to verify (admins only)</string>
+    <string name="profile_developer_headline">Developer</string>
+    <string name="profile_developer_support">ExChat Developer</string>
+    <string name="profile_developer_support_approved">ExChat Developer (Approved by FromChat developer)</string>
+    <string name="profile_developer_support_not_approved">ExChat Developer (Not approved by FromChat developer)</string>
 
     <!-- Verify (admin) -->
     <string name="verify">Verify</string>
@@ -475,16 +481,28 @@
     <string name="settings_category_exchat">EXChat</string>
     <string name="settings_category_exchat_d">EXChat client settings</string>
     <string name="settings_quick_replies_title">Quick Replies</string>
-    <string name="settings_quick_replies_desc">Define custom quick replies (shortcuts) to send pre-defined messages in chats by typing /shortcut.</string>
-    <string name="settings_quick_replies_shortcut">Shortcut</string>
-    <string name="settings_quick_replies_shortcut_placeholder">e.g., hello</string>
-    <string name="settings_quick_replies_message">Message</string>
-    <string name="settings_quick_replies_message_placeholder">Type your quick reply message...</string>
+    <string name="settings_quick_replies_desc">Configure shortcut commands (e.g. /hello) to send pre-written templates quickly.</string>
+    <string name="settings_quick_replies_empty">No quick replies created yet. Tap the button below to add one.</string>
     <string name="settings_quick_replies_add">Add Quick Reply</string>
-    <string name="settings_quick_replies_delete">Delete</string>
-    <string name="settings_quick_replies_empty">No quick replies created yet.</string>
-    <string name="settings_quick_replies_error_empty">Fields cannot be empty</string>
+    <string name="settings_quick_replies_delete">Delete Quick Reply</string>
+    <string name="settings_quick_replies_shortcut">Shortcut</string>
+    <string name="settings_quick_replies_shortcut_placeholder">hello</string>
+    <string name="settings_quick_replies_message">Message</string>
+    <string name="settings_quick_replies_message_placeholder">Hello! How can I help you today?</string>
+    <string name="settings_quick_replies_error_empty">This field cannot be empty</string>
     <string name="settings_quick_replies_error_space">Shortcut cannot contain spaces</string>
     <string name="settings_quick_replies_error_duplicate">Shortcut already exists</string>
+    <string name="settings_quick_replies_category">Quick Replies</string>
+    <string name="settings_auto_responder_category">Auto-responder</string>
+    <string name="settings_auto_responder_enabled">Enable Auto-responder</string>
+    <string name="settings_auto_responder_enabled_desc">Automatically reply to new messages when the chat with the sender is not open</string>
+    <string name="settings_auto_responder_text_title">Auto-response message</string>
+    <string name="settings_auto_responder_text_desc">Set the text sent to incoming private chats</string>
+    <string name="settings_auto_responder_text_placeholder">Hello! I am currently busy, will get back to you soon.</string>
+    <string name="settings_auto_responder_text_dialog_title">Edit Auto-response Text</string>
+    <string name="settings_auto_responder_only_offline">Only when offline</string>
+    <string name="settings_auto_responder_only_offline_desc">Reply only if the app is closed or running in the background to save battery</string>
+    <string name="settings_advanced_category">Advanced</string>
+    <string name="settings_approval_status">Approve verified accounts</string>
+    <string name="settings_approval_status_desc">If enabled, verified accounts will show as approved by FromChat developers. Otherwise, they show as not approved.</string>
 </resources>
-

@@ -333,6 +333,9 @@ object NotificationHelper {
                     conversationTitle = "Direct Messages"
                 )
                 shownDm.add(shownDmKey)
+                runCatching {
+                    ru.fromchat.config.AutoResponder.onIncomingMessage(envelope.senderId)
+                }
             }
 
         val newMaxDmId = dmMessages.maxOfOrNull { it.id } ?: 0

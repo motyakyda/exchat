@@ -202,6 +202,7 @@ fun ChatTopBarInner(
                         StatusBadge(
                             verificationStatus = status,
                             size = 18.dp,
+                            userId = userId,
                         )
                     }
                 }

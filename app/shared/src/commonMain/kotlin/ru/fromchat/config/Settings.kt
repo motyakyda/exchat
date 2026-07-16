@@ -28,6 +28,10 @@ object Settings {
     private const val DEVICE_SESSIONS_CACHE_KEY = "device_sessions_cache_v1"
     private const val LAST_SERVER_INSTANCE_ID_KEY = "last_server_instance_id"
     private const val QUICK_REPLIES_KEY = "quick_replies_v1"
+    private const val AUTO_RESPONDER_ENABLED_KEY = "auto_responder_enabled"
+    private const val AUTO_RESPONDER_TEXT_KEY = "auto_responder_text"
+    private const val AUTO_RESPONDER_ONLY_OFFLINE_KEY = "auto_responder_only_offline"
+    private const val APPROVAL_STATUS_ENABLED_KEY = "approval_status_enabled"
 
     private val settings = PlatformSettings()
     private val deviceSessionsJson = Json { ignoreUnknownKeys = true }
@@ -207,4 +211,20 @@ object Settings {
             settings.putString(QUICK_REPLIES_KEY, enc)
         }
     }
+
+    var autoResponderEnabled: Boolean
+        get() = runBlocking { settings.getBoolean(AUTO_RESPONDER_ENABLED_KEY, false) }
+        set(value) = runIO { settings.putBoolean(AUTO_RESPONDER_ENABLED_KEY, value) }
+
+    var autoResponderText: String
+        get() = runBlocking { settings.getString(AUTO_RESPONDER_TEXT_KEY, "") }
+        set(value) = runIO { settings.putString(AUTO_RESPONDER_TEXT_KEY, value) }
+
+    var autoResponderOnlyOffline: Boolean
+        get() = runBlocking { settings.getBoolean(AUTO_RESPONDER_ONLY_OFFLINE_KEY, true) }
+        set(value) = runIO { settings.putBoolean(AUTO_RESPONDER_ONLY_OFFLINE_KEY, value) }
+
+    var approvalStatusEnabled: Boolean
+        get() = runBlocking { settings.getBoolean(APPROVAL_STATUS_ENABLED_KEY, false) }
+        set(value) = runIO { settings.putBoolean(APPROVAL_STATUS_ENABLED_KEY, value) }
 }

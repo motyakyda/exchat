@@ -689,6 +689,7 @@ fun MessageItem(
                                                 StatusBadge(
                                                     verificationStatus = senderVerificationStatus,
                                                     size = 14.dp,
+                                                    userId = message.user_id,
                                                 )
                                             }
                                         }
@@ -739,6 +740,7 @@ fun MessageItem(
                                                 StatusBadge(
                                                     verificationStatus = senderVerificationStatus,
                                                     size = 14.dp,
+                                                    userId = message.user_id,
                                                 )
                                             }
                                         }
