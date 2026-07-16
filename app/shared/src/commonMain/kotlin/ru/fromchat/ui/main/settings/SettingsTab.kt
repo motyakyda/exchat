@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,6 +38,8 @@ import ru.fromchat.settings_category_account
 import ru.fromchat.settings_category_account_d
 import ru.fromchat.settings_category_appearance
 import ru.fromchat.settings_category_appearance_d
+import ru.fromchat.settings_category_exchat
+import ru.fromchat.settings_category_exchat_d
 import ru.fromchat.settings_category_devices
 import ru.fromchat.settings_category_devices_d
 import ru.fromchat.settings_category_notifications
@@ -74,6 +77,14 @@ fun SettingsTab() {
                 .padding(innerPadding)
         ) {
             Category(Modifier.padding(top = 16.dp)) {
+                ListItem(
+                    headline = stringResource(Res.string.settings_category_exchat),
+                    supportingText = stringResource(Res.string.settings_category_exchat_d),
+                    onClick = { navController.navigate(SettingsRoutes.EXChat) },
+                    leadingContent = { Icon(Icons.Filled.Settings, null) },
+                    divider = true
+                )
+
                 ListItem(
                     headline = stringResource(Res.string.settings_category_account),
                     supportingText = stringResource(Res.string.settings_category_account_d),

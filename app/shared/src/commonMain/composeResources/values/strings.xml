@@ -470,4 +470,21 @@
     <string name="suspended_sheet_desc">Your account was blocked for violating the community rules.\nYou can still read your chats, but new messages are currently paused.\nIf you think this is a mistake, contact support and we can help.</string>
     <string name="suspended_sheet_reason_label">Reason</string>
     <string name="suspended_sheet_action_contact_support">Contact support</string>
+
+    <!-- EXChat & Quick Replies -->
+    <string name="settings_category_exchat">EXChat</string>
+    <string name="settings_category_exchat_d">EXChat client settings</string>
+    <string name="settings_quick_replies_title">Quick Replies</string>
+    <string name="settings_quick_replies_desc">Define custom quick replies (shortcuts) to send pre-defined messages in chats by typing /shortcut.</string>
+    <string name="settings_quick_replies_shortcut">Shortcut</string>
+    <string name="settings_quick_replies_shortcut_placeholder">e.g., hello</string>
+    <string name="settings_quick_replies_message">Message</string>
+    <string name="settings_quick_replies_message_placeholder">Type your quick reply message...</string>
+    <string name="settings_quick_replies_add">Add Quick Reply</string>
+    <string name="settings_quick_replies_delete">Delete</string>
+    <string name="settings_quick_replies_empty">No quick replies created yet.</string>
+    <string name="settings_quick_replies_error_empty">Fields cannot be empty</string>
+    <string name="settings_quick_replies_error_space">Shortcut cannot contain spaces</string>
+    <string name="settings_quick_replies_error_duplicate">Shortcut already exists</string>
 </resources>
+

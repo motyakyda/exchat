@@ -94,6 +94,7 @@ import ru.fromchat.ui.main.settings.LogsScreen
 import ru.fromchat.ui.main.settings.AboutScreen
 import ru.fromchat.ui.main.settings.AppearanceScreen
 import ru.fromchat.ui.main.settings.DevicesScreen
+import ru.fromchat.ui.main.settings.EXChatScreen
 import ru.fromchat.ui.main.settings.NotificationsScreen
 import ru.fromchat.ui.main.settings.SettingsRoutes
 import ru.fromchat.ui.main.settings.account.AccountScreen
@@ -642,6 +643,10 @@ fun App(
 
                             settingsComposable(SettingsRoutes.Appearance) {
                                 AppearanceScreen(onBack = { navController.navigateUp() })
+                             }
+
+                            settingsComposable(SettingsRoutes.EXChat) {
+                                EXChatScreen(onBack = { navController.navigateUp() })
                             }
 
                             settingsComposable(SettingsRoutes.Notifications) {

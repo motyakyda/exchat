@@ -440,4 +440,21 @@
     <string name="suspended_sheet_desc">Ваш аккаунт заблокирован за нарушение правил.\nСейчас вы можете читать чаты, но отправка новых сообщений временно отключена.\nЕсли вы считаете, что это ошибка, свяжитесь с поддержкой и мы поможем разобраться.</string>
     <string name="suspended_sheet_reason_label">Причина</string>
     <string name="suspended_sheet_action_contact_support">Связаться с поддержкой</string>
+
+    <!-- EXChat & Quick Replies -->
+    <string name="settings_category_exchat">EXChat</string>
+    <string name="settings_category_exchat_d">Настройки клиента EXChat</string>
+    <string name="settings_quick_replies_title">Быстрые ответы</string>
+    <string name="settings_quick_replies_desc">Создавайте быстрые ответы (ярлыки), чтобы отправлять заготовленные сообщения в чатах, набрав /ярлык.</string>
+    <string name="settings_quick_replies_shortcut">Ярлык</string>
+    <string name="settings_quick_replies_shortcut_placeholder">например, привет</string>
+    <string name="settings_quick_replies_message">Сообщение</string>
+    <string name="settings_quick_replies_message_placeholder">Введите текст быстрого ответа...</string>
+    <string name="settings_quick_replies_add">Добавить быстрый ответ</string>
+    <string name="settings_quick_replies_delete">Удалить</string>
+    <string name="settings_quick_replies_empty">Быстрые ответы пока не созданы.</string>
+    <string name="settings_quick_replies_error_empty">Поля не могут быть пустыми</string>
+    <string name="settings_quick_replies_error_space">Ярлык не должен содержать пробелы</string>
+    <string name="settings_quick_replies_error_duplicate">Ярлык уже существует</string>
 </resources>
+

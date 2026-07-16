@@ -16,4 +16,5 @@ object SettingsRoutes {
     const val About = "about"
     const val Logs = "settings/logs"
     const val LogFiles = "settings/logs/files"
+    const val EXChat = "settings/exchat"
 }

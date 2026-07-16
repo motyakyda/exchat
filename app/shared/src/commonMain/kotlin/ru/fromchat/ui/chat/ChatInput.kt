@@ -29,13 +29,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Reply
 import androidx.compose.material.icons.rounded.ArrowUpward
@@ -88,6 +92,8 @@ import ru.fromchat.message_corrupted_short
 import ru.fromchat.message_editing_title
 import ru.fromchat.message_placeholder
 import ru.fromchat.message_replying_to
+import ru.fromchat.config.Settings
+import ru.fromchat.config.QuickReply
 import ru.fromchat.suspend_chat_banner_message
 import ru.fromchat.ui.chat.utils.SelectedAttachment
 import ru.fromchat.ui.chat.utils.TypingHandler
@@ -250,6 +256,15 @@ fun ChatInput(
     var typingJob by remember { mutableStateOf<kotlinx.coroutines.Job?>(null) }
     var attachments by remember { mutableStateOf<List<SelectedAttachment>>(emptyList()) }
 
+    val quickReplies = remember(text.isEmpty()) { Settings.readQuickReplies() }
+    val showSuggestions = text.startsWith("/") && !text.contains(" ")
+    val query = if (showSuggestions) text.substring(1).lowercase() else ""
+    val matchingReplies = if (showSuggestions) {
+        quickReplies.filter { it.shortcut.lowercase().startsWith(query) }
+    } else {
+        emptyList()
+    }
+
     val launchImagePicker = rememberImagePicker { uris ->
         attachments = attachments + uris.map { uri ->
             SelectedAttachment(
@@ -327,11 +342,67 @@ fun ChatInput(
                 )
             }
         } else {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                AnimatedVisibility(
+                    visible = showSuggestions && matchingReplies.isNotEmpty(),
+                    enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically(),
+                ) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp)
+                            .heightIn(max = 200.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        tonalElevation = 8.dp
+                    ) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                        ) {
+                            items(matchingReplies) { reply ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            onTextChange(reply.message)
+                                        }
+                                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "/",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.primary,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(
+                                            text = "/${reply.shortcut}",
+                                            style = MaterialTheme.typography.titleSmall,
+                                            fontWeight = FontWeight.Bold,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                        Text(
+                                            text = reply.message,
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
                 // Inner row must not use fillMaxWidth() here: it shares this outer Row with the
                 // send/voice slot. fillMaxWidth() would consume all width and leave the sibling Box at 0dp.
                 Row(
@@ -534,7 +605,14 @@ fun ChatInput(
                         .clickable {
                             if (canSend) {
                                 val plaintext = text.trim().ifBlank { "" }
-                                onSend(plaintext, attachments)
+                                val finalMessage = if (plaintext.startsWith("/") && !plaintext.contains(" ")) {
+                                    val shortcutName = plaintext.removePrefix("/").lowercase()
+                                    val match = Settings.readQuickReplies().find { it.shortcut.lowercase() == shortcutName }
+                                    match?.message ?: plaintext
+                                } else {
+                                    plaintext
+                                }
+                                onSend(finalMessage, attachments)
                                 onTextChange("")
                                 attachments = emptyList()
                                 typingHandler.stopTyping()
@@ -593,6 +671,7 @@ fun ChatInput(
                         )
                     }
                 }
+            }
             }
         }
     }

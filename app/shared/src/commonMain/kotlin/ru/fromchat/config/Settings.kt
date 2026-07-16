@@ -27,9 +27,11 @@ object Settings {
     private const val HTTPS_ENABLED_KEY = "https_enabled"
     private const val DEVICE_SESSIONS_CACHE_KEY = "device_sessions_cache_v1"
     private const val LAST_SERVER_INSTANCE_ID_KEY = "last_server_instance_id"
+    private const val QUICK_REPLIES_KEY = "quick_replies_v1"
 
     private val settings = PlatformSettings()
     private val deviceSessionsJson = Json { ignoreUnknownKeys = true }
+    private var cachedQuickReplies: List<QuickReply>? = null
 
     private fun runIO(block: suspend CoroutineScope.() -> Unit) {
         CoroutineScope(Dispatchers.IO).launch(block = block)
@@ -176,4 +178,33 @@ object Settings {
     var lastKnownServerInstanceId: String
         get() = runBlocking { settings.getString(LAST_SERVER_INSTANCE_ID_KEY, "") }
         set(value) = runIO { settings.putString(LAST_SERVER_INSTANCE_ID_KEY, value) }
+
+    fun readQuickReplies(): List<QuickReply> {
+        val cached = cachedQuickReplies
+        if (cached != null) return cached
+        val raw = runBlocking { settings.getString(QUICK_REPLIES_KEY, "") }
+        if (raw.isEmpty()) {
+            cachedQuickReplies = emptyList()
+            return emptyList()
+        }
+        val decoded = runCatching {
+            deviceSessionsJson.decodeFromString(
+                ListSerializer(QuickReply.serializer()),
+                raw,
+            )
+        }.getOrDefault(emptyList())
+        cachedQuickReplies = decoded
+        return decoded
+    }
+
+    fun writeQuickReplies(list: List<QuickReply>) {
+        cachedQuickReplies = list
+        runIO {
+            val enc = deviceSessionsJson.encodeToString(
+                ListSerializer(QuickReply.serializer()),
+                list,
+            )
+            settings.putString(QUICK_REPLIES_KEY, enc)
+        }
+    }
 }
